@@ -4,559 +4,297 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Archit Jain — Software Development Engineer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --border: #1e1e2e;
-      --accent: #00d4aa;
-      --accent2: #7c6af7;
+      --bg: #060608;
+      --surface: #0e0e14;
+      --border: #1a1a28;
+      --accent: #4fffb0;
+      --accent2: #6e6af7;
       --accent3: #ff6b6b;
-      --text: #e8e8f0;
-      --muted: #6b6b85;
-      --card: #13131e;
+      --amber: #ffb347;
+      --text: #eaeaf5;
+      --muted: #5a5a78;
+      --card: #0e0e16;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 300;
       overflow-x: hidden;
     }
 
-    /* ── NOISE OVERLAY ── */
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* GRID BG */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.4;
-    }
-
-    /* ── GLOW BLOBS ── */
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
+      background-image:
+        linear-gradient(rgba(78,255,176,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78,255,176,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.12;
-    }
-    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation: drift 18s ease-in-out infinite alternate; }
-    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -100px; right: -100px; animation: drift 22s ease-in-out infinite alternate-reverse; }
-    .blob-3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 50%; animation: drift 14s ease-in-out infinite alternate; }
-
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(60px, 40px) scale(1.1); }
     }
 
-    /* ── NAV ── */
+    /* BLOBS */
+    .blob { position: fixed; border-radius: 50%; filter: blur(130px); pointer-events: none; z-index: 0; }
+    .b1 { width: 700px; height: 700px; background: rgba(78,255,176,0.07); top: -250px; left: -200px; animation: drift 20s ease-in-out infinite alternate; }
+    .b2 { width: 500px; height: 500px; background: rgba(110,106,247,0.08); bottom: -150px; right: -100px; animation: drift 25s ease-in-out infinite alternate-reverse; }
+    .b3 { width: 350px; height: 350px; background: rgba(255,179,71,0.05); top: 40%; left: 45%; animation: drift 16s ease-in-out infinite alternate; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(50px,35px) scale(1.08); } }
+
+    /* NAV */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 4rem;
-      background: rgba(10,10,15,0.7);
-      backdrop-filter: blur(20px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 4rem;
+      background: rgba(6,6,8,0.75);
+      backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
     }
-
     .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.2rem;
-      color: var(--accent);
-      letter-spacing: -0.02em;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem;
+      color: var(--accent); letter-spacing: -0.02em;
     }
-
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.78rem;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.2s;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--muted); text-decoration: none; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--accent); }
 
-    /* ── SECTIONS ── */
+    /* SECTIONS */
     section {
-      position: relative;
-      z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 6rem 2rem;
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto; padding: 6rem 2rem;
     }
+    .divider { border: none; border-top: 1px solid var(--border); }
 
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: 8rem;
-    }
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding-top: 8rem; }
 
-    .hero-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(78,255,176,0.25);
+      background: rgba(78,255,176,0.06); padding: 0.35rem 0.9rem;
+      border-radius: 2px; margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
     }
+    .chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     h1 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.4s forwards;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(3.8rem, 8vw, 7.5rem);
+      line-height: 0.93; letter-spacing: -0.04em;
+      opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
     }
-
-    h1 .line-accent { color: var(--accent); }
-    h1 .line-dim { color: var(--muted); }
+    h1 .dim { color: var(--muted); }
+    h1 .hi { color: var(--accent); }
 
     .hero-desc {
-      margin-top: 2rem;
-      max-width: 560px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--muted);
-      opacity: 0;
-      animation: fadeUp 0.8s 0.6s forwards;
+      margin-top: 2rem; max-width: 580px; font-size: 1.05rem;
+      line-height: 1.75; color: #8888aa;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
     }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
 
     .hero-cta {
-      margin-top: 3rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
+      margin-top: 2.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
     }
-
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      border-radius: 4px;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.8rem 1.8rem; border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; cursor: pointer; transition: all 0.2s; border: none;
     }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0a0a0f;
-      font-weight: 500;
-    }
-    .btn-primary:hover { background: #00f0c0; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,170,0.3); }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
+    .btn-primary { background: var(--accent); color: #060608; font-weight: 500; }
+    .btn-primary:hover { background: #78ffc5; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(78,255,176,0.25); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
     .hero-stats {
-      margin-top: 5rem;
-      display: flex;
-      gap: 4rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
+      margin-top: 5rem; display: flex; gap: 4rem;
+      opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+      padding-top: 2.5rem; border-top: 1px solid var(--border);
     }
+    .stat-n { font-family: 'Syne', sans-serif; font-size: 2.6rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .stat-l { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
 
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .stat-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 0.3rem;
-    }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(22px); } to { opacity:1; transform: translateY(0); } }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* SECTION LABELS */
+    .label {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.6rem;
     }
-
-    /* ── SECTION HEADERS ── */
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-    }
-
     h2 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2rem, 4vw, 3rem);
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 3rem;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 3rem;
     }
 
-    /* ── SKILLS ── */
-    #skills { border-top: 1px solid var(--border); }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1.2rem; }
     .skill-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.8rem;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.6rem; transition: all 0.3s; position: relative; overflow: hidden;
     }
-
-    .skill-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
+    .skill-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transform: scaleX(0);
-      transition: transform 0.3s;
+      transform: scaleX(0); transition: transform 0.3s; transform-origin: left;
     }
-    .skill-card:hover::before { transform: scaleX(1); }
-    .skill-card:hover { border-color: rgba(0,212,170,0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-
-    .skill-icon {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .skill-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .skill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 1rem;
-    }
-
+    .skill-card:hover::after { transform: scaleX(1); }
+    .skill-card:hover { border-color: rgba(78,255,176,0.15); transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .sk-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
+    .sk-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .sk-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
     .tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      padding: 0.25rem 0.6rem;
-      background: rgba(0,212,170,0.08);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 3px;
-      color: var(--accent);
-      letter-spacing: 0.04em;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.63rem;
+      padding: 0.2rem 0.55rem; border-radius: 2px; letter-spacing: 0.04em;
     }
+    .tg { background: rgba(78,255,176,0.07); border: 1px solid rgba(78,255,176,0.18); color: var(--accent); }
+    .tp { background: rgba(110,106,247,0.07); border: 1px solid rgba(110,106,247,0.18); color: var(--accent2); }
+    .tr { background: rgba(255,107,107,0.07); border: 1px solid rgba(255,107,107,0.18); color: var(--accent3); }
+    .ta { background: rgba(255,179,71,0.07); border: 1px solid rgba(255,179,71,0.18); color: var(--amber); }
 
-    .tag.purple {
-      background: rgba(124,106,247,0.08);
-      border-color: rgba(124,106,247,0.2);
-      color: var(--accent2);
-    }
-
-    .tag.red {
-      background: rgba(255,107,107,0.08);
-      border-color: rgba(255,107,107,0.2);
-      color: var(--accent3);
-    }
-
-    /* ── EXPERIENCE ── */
-    #experience { border-top: 1px solid var(--border); }
-
-    .timeline { position: relative; }
+    /* EXPERIENCE */
+    .timeline { position: relative; padding-left: 1.5rem; }
     .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0; bottom: 0;
+      content: ''; position: absolute; left: 0; top: 8px; bottom: 0;
       width: 1px;
-      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+      background: linear-gradient(to bottom, var(--accent), var(--accent2) 60%, transparent);
     }
-
-    .exp-item {
-      padding-left: 2.5rem;
-      padding-bottom: 3.5rem;
-      position: relative;
-    }
-
+    .exp-item { padding-left: 2rem; padding-bottom: 3.5rem; position: relative; }
     .exp-item::before {
-      content: '';
-      position: absolute;
-      left: -5px;
-      top: 6px;
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: 2px solid var(--bg);
-      box-shadow: 0 0 12px var(--accent);
+      content: ''; position: absolute; left: -5.5px; top: 7px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg);
+      box-shadow: 0 0 14px rgba(78,255,176,0.6);
+    }
+    .exp-date { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .exp-co { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.25rem; margin-bottom: 0.15rem; }
+    .exp-role { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.2rem; }
+    .exp-pts { list-style: none; }
+    .exp-pts li { font-size: 0.88rem; line-height: 1.7; color: #9999bb; padding-left: 1.1rem; position: relative; margin-bottom: 0.45rem; }
+    .exp-pts li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.65rem; top: 5px; }
+
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px,1fr)); gap: 1.3rem; }
+    .proj-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.8rem; transition: all 0.3s;
+      display: flex; flex-direction: column; gap: 0.9rem; position: relative; overflow: hidden;
+    }
+    .proj-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(78,255,176,0.03) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .proj-card:hover::before { opacity: 1; }
+    .proj-card:hover { border-color: rgba(110,106,247,0.25); transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .proj-head { display: flex; justify-content: space-between; align-items: flex-start; }
+    .proj-icon { font-size: 1.5rem; }
+    .proj-links { display: flex; gap: 0.5rem; }
+    .proj-link {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      padding: 0.25rem 0.65rem; border: 1px solid var(--border);
+      border-radius: 2px; color: var(--muted); text-decoration: none; transition: all 0.2s;
+    }
+    .proj-link:hover { border-color: var(--accent2); color: var(--accent2); }
+    .proj-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .proj-desc { font-size: 0.84rem; line-height: 1.65; color: var(--muted); flex: 1; }
+    .proj-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      padding: 0.18rem 0.5rem; border-radius: 2px; letter-spacing: 0.06em;
+      background: rgba(78,255,176,0.08); border: 1px solid rgba(78,255,176,0.2); color: var(--accent);
+      margin-bottom: 0.3rem;
     }
 
-    .exp-date {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .exp-company {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .exp-role {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 1.2rem;
-    }
-
-    .exp-points { list-style: none; }
-    .exp-points li {
-      font-size: 0.92rem;
-      line-height: 1.7;
-      color: #b0b0c8;
-      padding-left: 1.2rem;
-      position: relative;
-      margin-bottom: 0.5rem;
-    }
-    .exp-points li::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-size: 0.7rem;
-      top: 4px;
-    }
-
-    .exp-tech {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    /* ── PROJECTS ── */
-    #projects { border-top: 1px solid var(--border); }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
-      transition: all 0.3s;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .project-card:hover {
-      border-color: rgba(124,106,247,0.3);
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-
-    .project-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .project-icon { font-size: 1.6rem; }
-
-    .project-links { display: flex; gap: 0.6rem; }
-    .project-link {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.3rem 0.7rem;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: all 0.2s;
-      letter-spacing: 0.04em;
-    }
-    .project-link:hover { border-color: var(--accent2); color: var(--accent2); }
-
-    .project-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    .project-desc {
-      font-size: 0.88rem;
-      line-height: 1.65;
-      color: var(--muted);
-      flex: 1;
-    }
-
-    /* ── ABOUT ── */
-    #about { border-top: 1px solid var(--border); }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .about-text p {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #b0b0c8;
-      margin-bottom: 1.2rem;
-    }
-
-    .about-details { display: flex; flex-direction: column; gap: 1rem; }
-
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; }
+    .about-text p { font-size: 0.95rem; line-height: 1.85; color: #9090b5; margin-bottom: 1.1rem; }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+    .detail-list { display: flex; flex-direction: column; gap: 0.8rem; }
     .detail-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.2rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.9rem 1.1rem; background: var(--card);
+      border: 1px solid var(--border); border-radius: 5px;
     }
+    .dk { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); min-width: 85px; }
+    .dv { font-size: 0.88rem; color: var(--text); }
 
-    .detail-key {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      min-width: 80px;
+    /* ACHIEVEMENTS */
+    .ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1rem; }
+    .ach-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1.4rem; display: flex; gap: 1rem; align-items: flex-start;
+      transition: all 0.25s;
     }
+    .ach-card:hover { border-color: rgba(255,179,71,0.2); transform: translateY(-2px); }
+    .ach-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .ach-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .ach-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 
-    .detail-val {
-      font-size: 0.9rem;
-      color: var(--text);
-    }
+    /* CONTACT */
+    #contact { text-align: center; }
+    #contact h2 { margin-bottom: 0.8rem; }
+    .contact-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+    .contact-links { display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
 
-    /* ── CONTACT ── */
-    #contact { border-top: 1px solid var(--border); text-align: center; }
-
-    #contact h2 { margin-bottom: 1rem; }
-
-    .contact-sub {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 3rem;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       border-top: 1px solid var(--border);
-      padding: 2rem 4rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 1.8rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
     }
+    footer p { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.06em; }
 
-    footer p {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-    }
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── RESPONSIVE ── */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
       section { padding: 4rem 1.5rem; }
       .hero-stats { gap: 2rem; flex-wrap: wrap; }
-      .about-grid { grid-template-columns: 1fr; }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
     }
   </style>
 </head>
 <body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
 
-  <!-- BLOBS -->
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-
-  <!-- NAV -->
   <nav>
     <div class="nav-logo">AJ</div>
     <ul class="nav-links">
@@ -570,272 +308,244 @@
 
   <!-- HERO -->
   <section id="hero">
-    <p class="hero-label">// Software Development Engineer</p>
+    <div class="chip">Available for opportunities</div>
     <h1>
-      <span class="line-dim">Archit</span><br>
-      <span class="line-accent">Jain.</span>
+      <span class="dim">Archit</span><br>
+      <span class="hi">Jain.</span>
     </h1>
     <p class="hero-desc">
-      Backend-heavy engineer with 3+ years building scalable microservices,
-      cloud-native systems, and distributed platforms at Nokia. Experienced
-      across Java, Spring Boot, Golang, React, Kubernetes &amp; AWS.
+      <strong>Software Development Engineer @ Nokia</strong> with 3+ years building
+      scalable backend microservices, cloud-native distributed systems and
+      Kubernetes-based orchestration platforms. Fluent in
+      <strong>Java · Go · Spring Boot · React · AWS</strong>.
     </p>
     <div class="hero-cta">
       <a href="https://www.linkedin.com/in/archit-jain-213827156" target="_blank" class="btn btn-primary">LinkedIn ↗</a>
       <a href="https://github.com/architjain-coder" target="_blank" class="btn btn-ghost">GitHub →</a>
-      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <a href="mailto:archit.jain04.aj@gmail.com" class="btn btn-ghost">Email →</a>
     </div>
     <div class="hero-stats">
-      <div>
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Years Experience</div>
-      </div>
-      <div>
-        <div class="stat-num">2</div>
-        <div class="stat-label">Companies</div>
-      </div>
-      <div>
-        <div class="stat-num">10+</div>
-        <div class="stat-label">REST APIs Built</div>
-      </div>
-      <div>
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Coffee Consumed</div>
-      </div>
+      <div><div class="stat-n">3+</div><div class="stat-l">Yrs Experience</div></div>
+      <div><div class="stat-n">2</div><div class="stat-l">Companies</div></div>
+      <div><div class="stat-n">10+</div><div class="stat-l">APIs Built</div></div>
+      <div><div class="stat-n">5</div><div class="stat-l">Projects</div></div>
     </div>
   </section>
+
+  <hr class="divider" style="position:relative;z-index:1;"/>
 
   <!-- SKILLS -->
   <section id="skills">
-    <p class="section-label">// 01. Expertise</p>
+    <p class="label">// 01. Expertise</p>
     <h2>Core Skills</h2>
     <div class="skills-grid">
       <div class="skill-card reveal">
-        <div class="skill-icon">☕</div>
-        <div class="skill-title">Backend Engineering</div>
-        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Building scalable, production-grade backend services and microservices architectures.</p>
-        <div class="skill-tags">
-          <span class="tag">Java</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag">REST APIs</span>
-          <span class="tag">Golang</span>
-        </div>
+        <div class="sk-icon">☕</div>
+        <div class="sk-title">Backend Engineering</div>
+        <div class="sk-desc">Production-grade services, REST APIs and business logic at scale.</div>
+        <div class="tags"><span class="tag tg">Java</span><span class="tag tg">Spring Boot</span><span class="tag tg">REST APIs</span><span class="tag tg">Golang</span></div>
       </div>
       <div class="skill-card reveal">
-        <div class="skill-icon">⚙️</div>
-        <div class="skill-title">Microservices &amp; Architecture</div>
-        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Designing distributed systems with fault isolation, scalability and clean API boundaries.</p>
-        <div class="skill-tags">
-          <span class="tag purple">Microservices</span>
-          <span class="tag purple">Distributed Systems</span>
-          <span class="tag purple">System Design</span>
-        </div>
+        <div class="sk-icon">⚙️</div>
+        <div class="sk-title">Microservices & Architecture</div>
+        <div class="sk-desc">Distributed systems with fault isolation, clean API boundaries and HA design.</div>
+        <div class="tags"><span class="tag tp">Microservices</span><span class="tag tp">Distributed Systems</span><span class="tag tp">System Design</span></div>
       </div>
       <div class="skill-card reveal">
-        <div class="skill-icon">☁️</div>
-        <div class="skill-title">Cloud &amp; DevOps</div>
-        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Deploying and managing cloud-native workloads across multi-cloud environments.</p>
-        <div class="skill-tags">
-          <span class="tag">Kubernetes</span>
-          <span class="tag">Docker</span>
-          <span class="tag">AWS</span>
-          <span class="tag">CI/CD</span>
-        </div>
+        <div class="sk-icon">☁️</div>
+        <div class="sk-title">Cloud & DevOps</div>
+        <div class="sk-desc">Cloud-native workloads across multi-cluster, multi-cloud environments.</div>
+        <div class="tags"><span class="tag tg">Kubernetes</span><span class="tag tg">Docker</span><span class="tag tg">AWS</span><span class="tag tg">CI/CD</span><span class="tag tg">NCS</span></div>
       </div>
       <div class="skill-card reveal">
-        <div class="skill-icon">⚛️</div>
-        <div class="skill-title">Frontend</div>
-        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Building internal developer portals and web interfaces with modern React.</p>
-        <div class="skill-tags">
-          <span class="tag red">React</span>
-          <span class="tag red">JavaScript</span>
-          <span class="tag red">REST Integration</span>
-        </div>
+        <div class="sk-icon">⚛️</div>
+        <div class="sk-title">Frontend</div>
+        <div class="sk-desc">Internal developer portals and web dashboards with React.</div>
+        <div class="tags"><span class="tag tr">React</span><span class="tag tr">JavaScript</span><span class="tag tr">REST Integration</span></div>
       </div>
     </div>
   </section>
 
+  <hr class="divider" style="position:relative;z-index:1;"/>
+
   <!-- EXPERIENCE -->
   <section id="experience">
-    <p class="section-label">// 02. Career</p>
+    <p class="label">// 02. Career</p>
     <h2>Work Experience</h2>
     <div class="timeline">
 
       <div class="exp-item reveal">
-        <div class="exp-date">Aug 2022 — Present</div>
-        <div class="exp-company">Nokia Solutions &amp; Networks</div>
+        <div class="exp-date">Aug 2022 — Present · 3 yrs</div>
+        <div class="exp-co">Nokia Solutions &amp; Networks</div>
         <div class="exp-role">Software Development Engineer · Bangalore, India</div>
-        <ul class="exp-points">
-          <li>Built and owned Java/Spring Boot backend microservices for Nokia Cloud Operations Manager (NCOM), supporting multi-cluster cloud orchestration.</li>
-          <li>Developed advanced backend features in Java and Go — scalable business logic and REST APIs for complex cloud lifecycle workflows.</li>
-          <li>Built cloud-agnostic, Kubernetes-based backend services across diverse cloud environments including NCS and AWS.</li>
-          <li>Developed React-based internal developer portal enabling engineers to monitor various lifecycle operations.</li>
-          <li>Implemented automated deployment and self-healing pipelines using Kubernetes, Docker, GitActions and CI/CD.</li>
+        <ul class="exp-pts">
+          <li>Built and owned Java/Spring Boot backend microservices for Nokia Cloud Operations Manager (NCOM), supporting real-world multi-cluster cloud orchestration.</li>
+          <li>Developed advanced backend features in Java and Go — scalable REST APIs for complex cloud lifecycle and orchestration workflows.</li>
+          <li>Contributed cloud-agnostic, Kubernetes-based backend services supporting multi-cloud deployments across NCS and AWS.</li>
+          <li>Built React-based internal developer portal enabling engineers to monitor lifecycle operations in real time.</li>
+          <li>Implemented automated deployment, scaling and self-healing pipelines via Kubernetes, Docker, GitActions and CI/CD.</li>
         </ul>
-        <div class="exp-tech">
-          <span class="tag">Java</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag">Golang</span>
-          <span class="tag purple">Kubernetes</span>
-          <span class="tag purple">Docker</span>
-          <span class="tag">React</span>
-          <span class="tag red">AWS</span>
-          <span class="tag red">CI/CD</span>
+        <div class="tags" style="margin-top:1rem;">
+          <span class="tag tg">Java</span><span class="tag tg">Spring Boot</span><span class="tag tg">Golang</span>
+          <span class="tag tp">Kubernetes</span><span class="tag tp">Docker</span>
+          <span class="tag tr">React</span><span class="tag tr">AWS</span><span class="tag ta">CI/CD</span>
         </div>
       </div>
 
       <div class="exp-item reveal">
-        <div class="exp-date">Aug 2021 — June 2022</div>
-        <div class="exp-company">Oculosense Pvt. Ltd.</div>
+        <div class="exp-date">Aug 2021 — June 2022 · Internship</div>
+        <div class="exp-co">Oculosense Pvt. Ltd.</div>
         <div class="exp-role">Backend Developer · Gurugram, India</div>
-        <ul class="exp-points">
+        <ul class="exp-pts">
           <li>Developed and maintained 10+ Spring Boot REST APIs powering device management, authentication and backend control workflows.</li>
-          <li>Improved backend response times by refactoring queries, optimizing service logic and introducing caching.</li>
-          <li>Deployed backend services on AWS EC2 and integrated AWS DynamoDB for scalable data storage.</li>
+          <li>Improved backend response times through query refactoring, service-logic optimization and caching.</li>
+          <li>Deployed services on AWS EC2 and integrated AWS DynamoDB for scalable persistent storage.</li>
         </ul>
-        <div class="exp-tech">
-          <span class="tag">Java</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag">REST APIs</span>
-          <span class="tag red">AWS EC2</span>
-          <span class="tag red">DynamoDB</span>
-          <span class="tag purple">SQL</span>
+        <div class="tags" style="margin-top:1rem;">
+          <span class="tag tg">Java</span><span class="tag tg">Spring Boot</span><span class="tag tg">REST APIs</span>
+          <span class="tag tr">AWS EC2</span><span class="tag tr">DynamoDB</span><span class="tag tp">SQL</span>
         </div>
       </div>
 
     </div>
   </section>
+
+  <hr class="divider" style="position:relative;z-index:1;"/>
 
   <!-- PROJECTS -->
   <section id="projects">
-    <p class="section-label">// 03. Work</p>
-    <h2>Projects</h2>
+    <p class="label">// 03. Work</p>
+    <h2>Featured Projects</h2>
     <div class="projects-grid">
 
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div class="project-icon">🔧</div>
-          <div class="project-links">
-            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+      <div class="proj-card reveal">
+        <div class="proj-head">
+          <div class="proj-icon">🔧</div>
+          <div class="proj-links">
+            <a href="https://github.com/architjain-coder/microservice-orchestrator" class="proj-link" target="_blank">GitHub ↗</a>
           </div>
         </div>
-        <div class="project-title">Microservice Orchestrator</div>
-        <p class="project-desc">A Spring Boot–based service orchestration framework demonstrating distributed service communication, circuit breaking and centralized logging using Java and Docker.</p>
-        <div class="skill-tags">
-          <span class="tag">Java</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag purple">Docker</span>
-        </div>
+        <div class="proj-badge">Java · Spring Boot</div>
+        <div class="proj-title">Microservice Orchestrator</div>
+        <p class="proj-desc">Spring Boot service orchestration framework with Resilience4j circuit breaking, centralized logging and Docker Compose multi-service setup. Demonstrates fault-tolerant inter-service communication patterns.</p>
+        <div class="tags"><span class="tag tg">Java 17</span><span class="tag tg">Spring Boot</span><span class="tag tp">Resilience4j</span><span class="tag tp">Docker</span></div>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div class="project-icon">☁️</div>
-          <div class="project-links">
-            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+      <div class="proj-card reveal">
+        <div class="proj-head">
+          <div class="proj-icon">☁️</div>
+          <div class="proj-links">
+            <a href="https://github.com/architjain-coder/cloud-resource-manager" class="proj-link" target="_blank">GitHub ↗</a>
           </div>
         </div>
-        <div class="project-title">Cloud Resource Manager API</div>
-        <p class="project-desc">REST API service built with Go and deployed on Kubernetes for managing cloud lifecycle operations — spin-up, teardown and health-check of compute resources.</p>
-        <div class="skill-tags">
-          <span class="tag">Golang</span>
-          <span class="tag purple">Kubernetes</span>
-          <span class="tag red">AWS</span>
-        </div>
+        <div class="proj-badge">Golang · Kubernetes</div>
+        <div class="proj-title">Cloud Resource Manager API</div>
+        <p class="proj-desc">Lightweight Go REST API for cloud compute lifecycle management — provision, teardown and health-check of resources. Includes request logging middleware, graceful shutdown, Dockerfile and K8s manifests.</p>
+        <div class="tags"><span class="tag tg">Golang</span><span class="tag tp">Kubernetes</span><span class="tag tr">AWS</span><span class="tag ta">Docker</span></div>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div class="project-icon">📊</div>
-          <div class="project-links">
-            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+      <div class="proj-card reveal">
+        <div class="proj-head">
+          <div class="proj-icon">🔐</div>
+          <div class="proj-links">
+            <a href="https://github.com/architjain-coder/auth-device-service" class="proj-link" target="_blank">GitHub ↗</a>
           </div>
         </div>
-        <div class="project-title">DevOps Pipeline Dashboard</div>
-        <p class="project-desc">React frontend integrated with a Spring Boot backend to visualize CI/CD pipeline status, deployment health and Kubernetes pod metrics in real time.</p>
-        <div class="skill-tags">
-          <span class="tag red">React</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag purple">CI/CD</span>
-        </div>
+        <div class="proj-badge">Java · Spring Security · DynamoDB</div>
+        <div class="proj-title">Auth &amp; Device Management Service</div>
+        <p class="proj-desc">Secure Spring Boot REST API for device registration, JWT-based authentication and session management with AWS DynamoDB integration. Role-based access control for IoT-style device backends.</p>
+        <div class="tags"><span class="tag tg">Java</span><span class="tag tg">Spring Boot</span><span class="tag tp">JWT</span><span class="tag tr">DynamoDB</span></div>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div class="project-icon">🔐</div>
-          <div class="project-links">
-            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+      <div class="proj-card reveal">
+        <div class="proj-head">
+          <div class="proj-icon">📊</div>
+          <div class="proj-links">
+            <a href="https://github.com/architjain-coder/devops-dashboard" class="proj-link" target="_blank">GitHub ↗</a>
           </div>
         </div>
-        <div class="project-title">Auth &amp; Device Management Service</div>
-        <p class="project-desc">Secure REST API service for device authentication, session management and backend control — built during internship at Oculosense with AWS DynamoDB integration.</p>
-        <div class="skill-tags">
-          <span class="tag">Java</span>
-          <span class="tag">Spring Boot</span>
-          <span class="tag red">DynamoDB</span>
+        <div class="proj-badge">React · Spring Boot</div>
+        <div class="proj-title">DevOps Pipeline Dashboard</div>
+        <p class="proj-desc">Full-stack React + Spring Boot application visualizing CI/CD pipeline status, deployment health and Kubernetes pod CPU/memory metrics in real time. Built to mirror internal tooling at Nokia.</p>
+        <div class="tags"><span class="tag tr">React</span><span class="tag tg">Spring Boot</span><span class="tag tp">CI/CD</span><span class="tag ta">K8s Metrics</span></div>
+      </div>
+
+      <div class="proj-card reveal">
+        <div class="proj-head">
+          <div class="proj-icon">📋</div>
+          <div class="proj-links">
+            <a href="https://github.com/architjain-coder/Simplyfi-Policy-generator" class="proj-link" target="_blank">GitHub ↗</a>
+          </div>
         </div>
+        <div class="proj-badge">HTML · JavaScript</div>
+        <div class="proj-title">Simplyfi Policy Generator</div>
+        <p class="proj-desc">A web-based policy generation tool built during an internship engagement. Automates creation of structured policy documents through a guided interface — one of the first production-facing projects.</p>
+        <div class="tags"><span class="tag tr">HTML</span><span class="tag tr">JavaScript</span><span class="tag ta">Web App</span></div>
       </div>
 
     </div>
   </section>
 
+  <hr class="divider" style="position:relative;z-index:1;"/>
+
   <!-- ABOUT -->
   <section id="about">
-    <p class="section-label">// 04. Background</p>
+    <p class="label">// 04. Background</p>
     <h2>About Me</h2>
     <div class="about-grid">
       <div class="about-text">
         <p>
-          I'm a Software Development Engineer with 3+ years of professional experience,
-          currently at Nokia Solutions &amp; Networks in Bangalore. I specialize in building
-          backend systems that are reliable, scalable and cloud-native.
+          I'm a <strong>Software Development Engineer</strong> with 3+ years of experience, currently at
+          <strong>Nokia Solutions &amp; Networks</strong> in Bangalore. My core focus is backend
+          engineering — building services that are reliable, distributed and built to scale.
         </p>
         <p>
-          My day-to-day involves working on distributed microservices for Nokia's Cloud
-          Operations Manager — handling real-world orchestration challenges across
-          multi-cluster environments. I'm backend-heavy but equally comfortable on the
-          frontend when the work demands it.
+          Day to day I work on distributed microservices for Nokia's Cloud Operations Manager platform,
+          solving real orchestration challenges across multi-cluster cloud environments. I'm backend-heavy
+          but equally comfortable in Go or React when the work demands it.
         </p>
         <p>
-          I hold a B.E. in Computer Science from Chandigarh University (2022) and have
-          won multiple hackathon recognitions including Top 15 at TetraFlip (VIT) and
-          IDEAthon Winner.
+          B.E. in Computer Science from <strong>Chandigarh University</strong> (2022). Hackathon winner
+          at VIT's TetraFlip and Top 15 finisher at IDEAthon.
         </p>
       </div>
-      <div class="about-details">
-        <div class="detail-row">
-          <span class="detail-key">Location</span>
-          <span class="detail-val">Bangalore, India</span>
+      <div class="detail-list">
+        <div class="detail-row"><span class="dk">Location</span><span class="dv">Bangalore, India</span></div>
+        <div class="detail-row"><span class="dk">Role</span><span class="dv">Software Development Engineer</span></div>
+        <div class="detail-row"><span class="dk">Company</span><span class="dv">Nokia Solutions &amp; Networks</span></div>
+        <div class="detail-row"><span class="dk">Education</span><span class="dv">B.E. CS — Chandigarh University</span></div>
+        <div class="detail-row"><span class="dk">Email</span><span class="dv">archit.jain04.aj@gmail.com</span></div>
+        <div class="detail-row"><span class="dk">GitHub</span><span class="dv">architjain-coder</span></div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div style="margin-top:3.5rem;">
+      <p class="label">// Achievements</p>
+      <div class="ach-grid" style="margin-top:1.2rem;">
+        <div class="ach-card reveal">
+          <div class="ach-icon">🏆</div>
+          <div><div class="ach-title">IDEAthon Winner</div><div class="ach-sub">TetraFlip Hackathon<br/>Vellore Institute of Technology</div></div>
         </div>
-        <div class="detail-row">
-          <span class="detail-key">Role</span>
-          <span class="detail-val">Software Development Engineer</span>
+        <div class="ach-card reveal">
+          <div class="ach-icon">🥇</div>
+          <div><div class="ach-title">Top 15 — TetraFlip</div><div class="ach-sub">National Hackathon<br/>Vellore Institute of Technology</div></div>
         </div>
-        <div class="detail-row">
-          <span class="detail-key">Company</span>
-          <span class="detail-val">Nokia Solutions &amp; Networks</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-key">Education</span>
-          <span class="detail-val">B.E. CS — Chandigarh University</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-key">Email</span>
-          <span class="detail-val">archit.jain04.aj@gmail.com</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-key">GitHub</span>
-          <span class="detail-val">architjain-coder</span>
+        <div class="ach-card reveal">
+          <div class="ach-icon">🎓</div>
+          <div><div class="ach-title">B.E. Computer Science</div><div class="ach-sub">Chandigarh University<br/>2018 – 2022 · GPA 7.01/10</div></div>
         </div>
       </div>
     </div>
   </section>
 
+  <hr class="divider" style="position:relative;z-index:1;"/>
+
   <!-- CONTACT -->
   <section id="contact">
-    <p class="section-label">// 05. Connect</p>
+    <p class="label">// 05. Connect</p>
     <h2>Get In Touch</h2>
-    <p class="contact-sub">Open to interesting opportunities, collaborations and conversations around backend systems and distributed architecture.</p>
+    <p class="contact-sub">Open to interesting opportunities, collaborations and conversations around backend systems, distributed architecture and cloud engineering.</p>
     <div class="contact-links">
       <a href="mailto:archit.jain04.aj@gmail.com" class="btn btn-primary">Send Email ↗</a>
       <a href="https://www.linkedin.com/in/archit-jain-213827156" target="_blank" class="btn btn-ghost">LinkedIn →</a>
@@ -843,24 +553,21 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <p>© 2025 Archit Jain</p>
-    <p>Built &amp; hosted on GitHub Pages</p>
+    <p>Hosted on GitHub Pages · architjain-coder.github.io</p>
   </footer>
 
   <script>
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
+    const obs = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 80);
-          observer.unobserve(e.target);
+          setTimeout(() => e.target.classList.add('visible'), i * 90);
+          obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.1 });
-    reveals.forEach(r => observer.observe(r));
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
   </script>
 </body>
 </html>
