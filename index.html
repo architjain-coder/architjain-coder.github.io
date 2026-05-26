@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Archit Jain — Software Development Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #00d4aa;
+      --accent2: #7c6af7;
+      --accent3: #ff6b6b;
+      --text: #e8e8f0;
+      --muted: #6b6b85;
+      --card: #13131e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── GLOW BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation: drift 18s ease-in-out infinite alternate; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -100px; right: -100px; animation: drift 22s ease-in-out infinite alternate-reverse; }
+    .blob-3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 50%; animation: drift 14s ease-in-out infinite alternate; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(60px, 40px) scale(1.1); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+    }
+
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    h1 .line-accent { color: var(--accent); }
+    h1 .line-dim { color: var(--muted); }
+
+    .hero-desc {
+      margin-top: 2rem;
+      max-width: 560px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0a0f;
+      font-weight: 500;
+    }
+    .btn-primary:hover { background: #00f0c0; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,170,0.3); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    .hero-stats {
+      margin-top: 5rem;
+      display: flex;
+      gap: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+
+    /* ── SKILLS ── */
+    #skills { border-top: 1px solid var(--border); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card:hover { border-color: rgba(0,212,170,0.2); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+    .skill-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      border-radius: 3px;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .tag.purple {
+      background: rgba(124,106,247,0.08);
+      border-color: rgba(124,106,247,0.2);
+      color: var(--accent2);
+    }
+
+    .tag.red {
+      background: rgba(255,107,107,0.08);
+      border-color: rgba(255,107,107,0.2);
+      color: var(--accent3);
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { border-top: 1px solid var(--border); }
+
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+
+    .exp-item {
+      padding-left: 2.5rem;
+      padding-bottom: 3.5rem;
+      position: relative;
+    }
+
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .exp-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-company {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .exp-role {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .exp-points { list-style: none; }
+    .exp-points li {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: #b0b0c8;
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+    .exp-points li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.7rem;
+      top: 4px;
+    }
+
+    .exp-tech {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { border-top: 1px solid var(--border); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .project-card:hover {
+      border-color: rgba(124,106,247,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .project-icon { font-size: 1.6rem; }
+
+    .project-links { display: flex; gap: 0.6rem; }
+    .project-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .project-link:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-top: 1px solid var(--border); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #b0b0c8;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-details { display: flex; flex-direction: column; gap: 1rem; }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .detail-key {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      min-width: 80px;
+    }
+
+    .detail-val {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    /* ── CONTACT ── */
+    #contact { border-top: 1px solid var(--border); text-align: center; }
+
+    #contact h2 { margin-bottom: 1rem; }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; }
+      .about-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BLOBS -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">AJ</div>
+    <ul class="nav-links">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-label">// Software Development Engineer</p>
+    <h1>
+      <span class="line-dim">Archit</span><br>
+      <span class="line-accent">Jain.</span>
+    </h1>
+    <p class="hero-desc">
+      Backend-heavy engineer with 3+ years building scalable microservices,
+      cloud-native systems, and distributed platforms at Nokia. Experienced
+      across Java, Spring Boot, Golang, React, Kubernetes &amp; AWS.
+    </p>
+    <div class="hero-cta">
+      <a href="https://www.linkedin.com/in/archit-jain-213827156" target="_blank" class="btn btn-primary">LinkedIn ↗</a>
+      <a href="https://github.com/architjain-coder" target="_blank" class="btn btn-ghost">GitHub →</a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Companies</div>
+      </div>
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">REST APIs Built</div>
+      </div>
+      <div>
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Coffee Consumed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label">// 01. Expertise</p>
+    <h2>Core Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">☕</div>
+        <div class="skill-title">Backend Engineering</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Building scalable, production-grade backend services and microservices architectures.</p>
+        <div class="skill-tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Golang</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-title">Microservices &amp; Architecture</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Designing distributed systems with fault isolation, scalability and clean API boundaries.</p>
+        <div class="skill-tags">
+          <span class="tag purple">Microservices</span>
+          <span class="tag purple">Distributed Systems</span>
+          <span class="tag purple">System Design</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">☁️</div>
+        <div class="skill-title">Cloud &amp; DevOps</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Deploying and managing cloud-native workloads across multi-cloud environments.</p>
+        <div class="skill-tags">
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Docker</span>
+          <span class="tag">AWS</span>
+          <span class="tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚛️</div>
+        <div class="skill-title">Frontend</div>
+        <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Building internal developer portals and web interfaces with modern React.</p>
+        <div class="skill-tags">
+          <span class="tag red">React</span>
+          <span class="tag red">JavaScript</span>
+          <span class="tag red">REST Integration</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="section-label">// 02. Career</p>
+    <h2>Work Experience</h2>
+    <div class="timeline">
+
+      <div class="exp-item reveal">
+        <div class="exp-date">Aug 2022 — Present</div>
+        <div class="exp-company">Nokia Solutions &amp; Networks</div>
+        <div class="exp-role">Software Development Engineer · Bangalore, India</div>
+        <ul class="exp-points">
+          <li>Built and owned Java/Spring Boot backend microservices for Nokia Cloud Operations Manager (NCOM), supporting multi-cluster cloud orchestration.</li>
+          <li>Developed advanced backend features in Java and Go — scalable business logic and REST APIs for complex cloud lifecycle workflows.</li>
+          <li>Built cloud-agnostic, Kubernetes-based backend services across diverse cloud environments including NCS and AWS.</li>
+          <li>Developed React-based internal developer portal enabling engineers to monitor various lifecycle operations.</li>
+          <li>Implemented automated deployment and self-healing pipelines using Kubernetes, Docker, GitActions and CI/CD.</li>
+        </ul>
+        <div class="exp-tech">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">Golang</span>
+          <span class="tag purple">Kubernetes</span>
+          <span class="tag purple">Docker</span>
+          <span class="tag">React</span>
+          <span class="tag red">AWS</span>
+          <span class="tag red">CI/CD</span>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-date">Aug 2021 — June 2022</div>
+        <div class="exp-company">Oculosense Pvt. Ltd.</div>
+        <div class="exp-role">Backend Developer · Gurugram, India</div>
+        <ul class="exp-points">
+          <li>Developed and maintained 10+ Spring Boot REST APIs powering device management, authentication and backend control workflows.</li>
+          <li>Improved backend response times by refactoring queries, optimizing service logic and introducing caching.</li>
+          <li>Deployed backend services on AWS EC2 and integrated AWS DynamoDB for scalable data storage.</li>
+        </ul>
+        <div class="exp-tech">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag red">AWS EC2</span>
+          <span class="tag red">DynamoDB</span>
+          <span class="tag purple">SQL</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">// 03. Work</p>
+    <h2>Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-header">
+          <div class="project-icon">🔧</div>
+          <div class="project-links">
+            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="project-title">Microservice Orchestrator</div>
+        <p class="project-desc">A Spring Boot–based service orchestration framework demonstrating distributed service communication, circuit breaking and centralized logging using Java and Docker.</p>
+        <div class="skill-tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag purple">Docker</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-header">
+          <div class="project-icon">☁️</div>
+          <div class="project-links">
+            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="project-title">Cloud Resource Manager API</div>
+        <p class="project-desc">REST API service built with Go and deployed on Kubernetes for managing cloud lifecycle operations — spin-up, teardown and health-check of compute resources.</p>
+        <div class="skill-tags">
+          <span class="tag">Golang</span>
+          <span class="tag purple">Kubernetes</span>
+          <span class="tag red">AWS</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-header">
+          <div class="project-icon">📊</div>
+          <div class="project-links">
+            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="project-title">DevOps Pipeline Dashboard</div>
+        <p class="project-desc">React frontend integrated with a Spring Boot backend to visualize CI/CD pipeline status, deployment health and Kubernetes pod metrics in real time.</p>
+        <div class="skill-tags">
+          <span class="tag red">React</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag purple">CI/CD</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-header">
+          <div class="project-icon">🔐</div>
+          <div class="project-links">
+            <a href="https://github.com/architjain-coder" class="project-link" target="_blank">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="project-title">Auth &amp; Device Management Service</div>
+        <p class="project-desc">Secure REST API service for device authentication, session management and backend control — built during internship at Oculosense with AWS DynamoDB integration.</p>
+        <div class="skill-tags">
+          <span class="tag">Java</span>
+          <span class="tag">Spring Boot</span>
+          <span class="tag red">DynamoDB</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">// 04. Background</p>
+    <h2>About Me</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a Software Development Engineer with 3+ years of professional experience,
+          currently at Nokia Solutions &amp; Networks in Bangalore. I specialize in building
+          backend systems that are reliable, scalable and cloud-native.
+        </p>
+        <p>
+          My day-to-day involves working on distributed microservices for Nokia's Cloud
+          Operations Manager — handling real-world orchestration challenges across
+          multi-cluster environments. I'm backend-heavy but equally comfortable on the
+          frontend when the work demands it.
+        </p>
+        <p>
+          I hold a B.E. in Computer Science from Chandigarh University (2022) and have
+          won multiple hackathon recognitions including Top 15 at TetraFlip (VIT) and
+          IDEAthon Winner.
+        </p>
+      </div>
+      <div class="about-details">
+        <div class="detail-row">
+          <span class="detail-key">Location</span>
+          <span class="detail-val">Bangalore, India</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Role</span>
+          <span class="detail-val">Software Development Engineer</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Company</span>
+          <span class="detail-val">Nokia Solutions &amp; Networks</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Education</span>
+          <span class="detail-val">B.E. CS — Chandigarh University</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Email</span>
+          <span class="detail-val">archit.jain04.aj@gmail.com</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">GitHub</span>
+          <span class="detail-val">architjain-coder</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">// 05. Connect</p>
+    <h2>Get In Touch</h2>
+    <p class="contact-sub">Open to interesting opportunities, collaborations and conversations around backend systems and distributed architecture.</p>
+    <div class="contact-links">
+      <a href="mailto:archit.jain04.aj@gmail.com" class="btn btn-primary">Send Email ↗</a>
+      <a href="https://www.linkedin.com/in/archit-jain-213827156" target="_blank" class="btn btn-ghost">LinkedIn →</a>
+      <a href="https://github.com/architjain-coder" target="_blank" class="btn btn-ghost">GitHub →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Archit Jain</p>
+    <p>Built &amp; hosted on GitHub Pages</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
